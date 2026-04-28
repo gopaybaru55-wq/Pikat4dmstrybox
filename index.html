@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Official Claim System — PIKAT4D Professional</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<style>
+:root {
+  --primary: #d97706; 
+  --primary-light: #fbbf24;
+  --bg-dark: #0a0a0a;
+  --surface: rgba(255, 255, 255, 0.05);
+  --border: rgba(217, 119, 6, 0.4);
+  --font-head: 'Syne', sans-serif;
+}
+
+body {
+  margin: 0; font-family: 'Plus Jakarta Sans', sans-serif;
+  background: linear-gradient(rgba(10,10,10,0.85), rgba(10,10,10,0.85)), url('https://i.imgur.com/wPlgJU7.png');
+  background-size: cover; background-position: center; background-attachment: fixed;
+  display: flex; flex-direction: column; align-items: center; color: #eaddcf; padding-top: 100px;
+  overflow-x: hidden;
+}
+
+/* TOP BAR */
+.top-bar {
+  background: rgba(0,0,0,0.9); width: 100%; height: 85px; display: flex; align-items: center; justify-content: center;
+  position: fixed; top: 0; z-index: 1000; border-bottom: 1px solid var(--border); backdrop-filter: blur(15px);
+}
+.top-bar-content { width: 100%; max-width: 1200px; display: flex; align-items: center; justify-content: center; position: relative; }
+.top-bar-logo { height: 48px; width: auto; filter: drop-shadow(0 0 12px var(--primary)); }
+
+/* BURGER MENU & SIDEBAR */
+.menu-burger { position: absolute; left: 20px; cursor: pointer; width: 30px; }
+.menu-burger span { display: block; height: 3px; width: 100%; background: var(--primary); margin: 5px 0; border-radius: 2px; }
+
+.side-menu {
+  position: fixed; top: 0; left: 0; width: 280px; height: 100%; background: #0d0d0d; border-right: 2px solid var(--border);
+  z-index: 2000; padding: 40px 20px; transform: translateX(-110%); transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.side-menu.active { transform: translateX(0); }
+.close-nav { text-align: right; font-size: 30px; color: #ff4d4d; cursor: pointer; margin-bottom: 20px; }
+
+.side-menu a { 
+  display: block; color: white; text-decoration: none; padding: 16px; font-weight: 700; 
+  border-radius: 10px; margin-bottom: 5px; transition: all 0.3s ease; font-size: 14px; text-transform: uppercase; 
+}
+.side-menu a:hover { 
+  background: var(--surface); 
+  color: var(--primary-light); 
+  padding-left: 30px; 
+  box-shadow: inset 4px 0 0 var(--primary);
+}
+
+/* RUNNING TEXT (MARQUEE) */
+.marquee-container {
+  width: 92%; max-width: 420px; background: rgba(217, 119, 6, 0.15); 
+  border: 1px solid var(--border); border-radius: 50px; padding: 10px 0;
+  margin: 15px 0; overflow: hidden; white-space: nowrap;
+}
+.marquee-text {
+  display: inline-block; padding-left: 100%; color: var(--primary-light);
+  font-size: 13px; font-weight: 600; animation: marquee 20s linear infinite;
+}
+@keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
+
+/* SLIDER */
+.slider-container { width: 92%; max-width: 420px; border-radius: 25px; overflow: hidden; border: 1px solid var(--border); box-shadow: 0 15px 35px rgba(0,0,0,0.8); }
+.slider-wrapper { display: flex; transition: transform 0.6s cubic-bezier(0.455, 0.03, 0.515, 0.955); }
+.slider-wrapper img { width: 100%; flex-shrink: 0; display: block; }
+
+/* MYSTERY BOX STYLING */
+.mystery-box-area { margin: 20px 0; position: relative; }
+.box-img { width: 180px; filter: drop-shadow(0 0 15px var(--primary)); cursor: pointer; transition: 0.3s; }
+.box-img.shake { animation: boxShake 0.2s infinite; }
+@keyframes boxShake { 0% { transform: rotate(0); } 25% { transform: rotate(-3deg); } 75% { transform: rotate(3deg); } 100% { transform: rotate(0); } }
+
+/* CARD & SCROLL TABLE */
+.card {
+  width: 92%; max-width: 420px; background: var(--surface); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 30px; padding: 35px 25px; margin-bottom: 20px; text-align: center; backdrop-filter: blur(10px); box-sizing: border-box;
+}
+
+.history-scroll {
+  max-height: 250px; overflow-y: auto; margin-top: 10px;
+}
+.history-scroll::-webkit-scrollbar { width: 4px; }
+.history-scroll::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
+
+input {
+  width: 100%; padding: 18px; margin-bottom: 15px; border-radius: 15px; border: 1px solid #333;
+  background: rgba(0,0,0,0.6); color: white; outline: none; box-sizing: border-box; text-align: center;
+}
+
+.main-btn {
+  width: 100%; background: linear-gradient(135deg, var(--primary), #b45309); color: #fff; border: none;
+  padding: 20px; border-radius: 15px; font-size: 16px; font-weight: 800; cursor: pointer; text-transform: uppercase;
+}
+
+/* MODAL POPUP */
+.modal-overlay {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9);
+  display: none; align-items: center; justify-content: center; z-index: 10000; backdrop-filter: blur(12px);
+}
+.modal-box {
+  background: #0d0d0d; width: 92%; max-width: 380px; padding: 45px 25px 30px; border-radius: 35px;
+  border: 1px solid var(--border); text-align: center; position: relative;
+}
+.close-modal { position: absolute; top: 20px; right: 20px; font-size: 26px; color: #888; cursor: pointer; }
+
+.chat-btn {
+  display: block; background: linear-gradient(135deg, var(--primary), #b45309); color: white; text-decoration: none;
+  padding: 18px; border-radius: 15px; font-weight: 800; margin-top: 25px;
+}
+
+/* FLOATING WA */
+.fab-wa {
+  position: fixed; right: 20px; bottom: 20px; width: 60px; height: 60px; background: #25d366;
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5); z-index: 1001; animation: bounceWA 2s infinite;
+}
+@keyframes bounceWA { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-10px) scale(1.05); } }
+
+/* NOTIF */
+#notif-container { position: fixed; bottom: 30px; left: 20px; z-index: 9999; }
+.live-notif {
+  background: #111; padding: 12px; border-radius: 18px; border: 1px solid var(--border);
+  margin-bottom: 10px; width: 250px; display: flex; align-items: center; gap: 10px; font-size: 12px;
+}
+
+</style>
+</head>
+<body>
+
+<div id="notif-container"></div>
+
+<div class="modal-overlay" id="successModal">
+    <div class="modal-box">
+        <div class="close-modal" onclick="closeModal()">×</div>
+        <div style="font-size: 55px; margin-bottom: 10px;">🎁</div>
+        <h2 style="font-family: var(--font-head); color: var(--primary-light); margin: 0; font-size: 24px;">BOX TERBUKA!</h2>
+        
+        <div id="prizeAmount" style="font-size: 32px; font-weight: 800; color: #ffd700; margin: 15px 0; text-shadow: 0 0 10px rgba(217, 119, 6, 0.8);">IDR 0</div>
+        
+        <p style="color: #eaddcf; font-size: 14px; line-height: 1.6; margin-top: 5px;">
+            Selamat untuk <b id="displayUser" style="color: var(--primary);">USER</b>,<br>
+            Screnshoot pesan ini sekarang!!<br>
+            dan berikan ke Customer service!!
+        </p>
+        <a href="https://pikatsodap.com/" class="chat-btn">KLAIM KE LIVE CHAT</a>
+    </div>
+</div>
+
+<div class="top-bar">
+    <div class="top-bar-content">
+        <div class="menu-burger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+        <img src="https://i.imgur.com/u1hGiml.png" class="top-bar-logo">
+    </div>
+</div>
+
+<div class="side-menu" id="sideMenu">
+    <div class="close-nav" onclick="toggleMenu()">×</div>
+    <a href="https://pikatsodap.com/">Lobby Utama</a>
+    <a href="https://pikatsodap.com/">Daftar Akun</a>
+    <a href="https://pikatsodap.com/">Riwayat Klaim</a>
+    <a href="https://ertepe.luvtoberi.com/index.html?rtp=pikat4d">RTP Live</a>
+</div>
+
+<div class="marquee-container">
+    <div class="marquee-text">
+        PIKAT4D - Mystery Box! Masukkan ID Anda dan buka kotak keberuntungan Anda sekarang. Hadiah menarik menunggu setiap harinya!
+    </div>
+</div>
+
+<div class="slider-container">
+    <div class="slider-wrapper" id="slider">
+        <img src="https://i.imgur.com/0I5uuHN.png">
+        <img src="https://i.imgur.com/9ywCdgr.png">
+        <img src="https://i.imgur.com/cz3G0jw.png">
+        <img src="https://i.imgur.com/lGNH9G0.png">
+        <img src="https://i.imgur.com/TaeXcAg.png">
+        <img src="https://i.imgur.com/p8hYPJH.png">
+        <img src="https://i.imgur.com/idnXs5b.png">
+        <img src="https://i.imgur.com/jZhdJYm.png">
+    </div>
+</div>
+
+<div class="card" style="margin-top: 20px;">
+    <div class="quota-box">
+        <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--primary); font-weight:800; margin-bottom:8px;">
+            <span>🔥 SLOT MISTERI BOX:</span><span id="qCount">5/15 Tersedia</span>
+        </div>
+        <div style="width:100%; height:8px; background:rgba(0,0,0,0.5); border-radius:10px; overflow:hidden;">
+            <div id="qBar" style="height:100%; width:33%; background:linear-gradient(90deg, var(--primary), #ffd700);"></div>
+        </div>
+    </div>
+
+    <div class="mystery-box-area">
+        <img src="https://i.imgur.com/cPo9fGr.png" class="box-img" id="boxIcon" alt="Mystery Box">
+    </div>
+
+    <input type="text" id="userId" placeholder="Masukkan User ID Anda">
+    
+    <button class="main-btn" id="claimBtn" onclick="processClaim()">BUKA MISTERI BOX</button>
+    <div id="statusMsg" style="margin-top:15px; font-size:13px; font-weight:700;"></div>
+</div>
+
+<div class="card" style="padding: 20px;">
+    <div style="font-family:var(--font-head); font-size:11px; color:var(--primary); text-align:left; letter-spacing:1px; border-bottom:1px solid #333; padding-bottom:10px;">20 TRANSAKSI TERAKHIR</div>
+    <div class="history-scroll">
+        <table style="width:100%; border-collapse:collapse; font-size:13px;" id="hTable"></table>
+    </div>
+</div>
+
+<div class="footer-banner" style="width: 92%; max-width: 420px; margin-bottom: 50px; border-radius: 20px; overflow: hidden;">
+    <img src="https://i.imgur.com/8rBhMEk.png" width="100%">
+</div>
+
+<a href="https://pikatsodap.com/" class="fab-wa">
+    <img src="https://img.icons8.com/color/38/whatsapp--v1.png" alt="WhatsApp">
+</a>
+
+<script>
+function toggleMenu() { document.getElementById("sideMenu").classList.toggle("active"); }
+function closeModal() { document.getElementById("successModal").style.display = "none"; location.reload(); }
+
+let sIdx = 0;
+const totalImages = 8; 
+setInterval(() => {
+    sIdx = (sIdx + 1) % totalImages;
+    const slider = document.getElementById("slider");
+    if(slider) slider.style.transform = `translateX(-${sIdx * 100}%)`;
+}, 4000);
+
+function showNotif() {
+    const container = document.getElementById('notif-container');
+    const uPrefix = ["WIN","BOSS","JP","VIP","MEGA","LUCKY"];
+    const user = uPrefix[Math.floor(Math.random()*uPrefix.length)] + Math.floor(Math.random()*89+10) + "***";
+    const amount = (Math.floor(Math.random() * (300 - 20 + 1)) + 20) * 1000;
+    
+    const n = document.createElement('div');
+    n.className = 'live-notif';
+    n.innerHTML = `<div style="background:var(--primary);padding:8px;border-radius:10px;">🎁</div><div><b>${user}</b> Box Terbuka!<br><span style="color:var(--primary-light)">IDR ${amount.toLocaleString('id-ID')}</span></div>`;
+    container.appendChild(n);
+    
+    const tbl = document.getElementById("hTable");
+    if(tbl) {
+        const row = tbl.insertRow(0);
+        row.innerHTML = `<td style="padding:12px 0; border-bottom:1px solid #222; color:#ccc;">${user}</td><td style="text-align:right; color:var(--primary); font-weight:bold;">IDR ${amount.toLocaleString('id-ID')}</td>`;
+        if(tbl.rows.length > 20) tbl.deleteRow(20);
+    }
+    setTimeout(() => { n.style.opacity="0"; setTimeout(()=>n.remove(),500); }, 4000);
+}
+
+setInterval(showNotif, 6000);
+for(let i=0; i<8; i++) { setTimeout(showNotif, i * 600); }
+
+function processClaim() {
+    const idValue = document.getElementById("userId").value.trim().toUpperCase();
+    const btn = document.getElementById("claimBtn");
+    const box = document.getElementById("boxIcon");
+    const status = document.getElementById("statusMsg");
+    
+    // 1. Validasi Input
+    if(!idValue || idValue.length < 3) {
+        status.innerHTML = "<span style='color:#ff4d4d'>Masukkan User ID yang valid!</span>";
+        return;
+    }
+
+    // 2. Cek apakah ID sudah pernah klaim (Sistem 1x Klaim)
+    const hasClaimed = localStorage.getItem("claim_" + idValue);
+    if(hasClaimed) {
+        status.innerHTML = "<span style='color:#ff4d4d'>MAAF! ID " + idValue + " SUDAH PERNAH KLAIM.</span>";
+        return;
+    }
+
+    // 3. Animasi Proses
+    btn.innerText = "MEMBUKA BOX...";
+    btn.disabled = true;
+    box.classList.add("shake");
+    status.innerHTML = "";
+
+    setTimeout(() => {
+        // 4. Simpan status klaim ke local storage agar tidak bisa klaim lagi
+        localStorage.setItem("claim_" + idValue, "true");
+
+        // 5. Generate Nominal Hadiah (Random Antara 25k - 500k)
+        const randomPrize = (Math.floor(Math.random() * (500 - 25 + 1)) + 25) * 1000;
+        document.getElementById("prizeAmount").innerText = "IDR " + randomPrize.toLocaleString('id-ID');
+
+        // 6. Efek Berhasil
+        confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#d97706', '#ffffff'] });
+        document.getElementById("displayUser").innerText = idValue;
+        document.getElementById("successModal").style.display = "flex";
+        
+        box.classList.remove("shake");
+        btn.innerText = "KLAIM BERHASIL";
+    }, 2500);
+}
+</script>
+
+</body>
+</html>
