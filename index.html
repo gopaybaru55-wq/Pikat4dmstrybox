@@ -304,6 +304,71 @@
     }
     .fab-wa:hover { transform: translateY(-3px); }
     .fab-wa img { width: 33px; height: 33px; }
+
+    /* ===== EFEK TOMBOL MELAYANG (WA, Prediksi Togel, Prediksi Bola) ===== */
+    .fab-wa { --glow: 37, 211, 102; animation: fab-glow 2.6s ease-in-out infinite; }
+    .fab-togel { --glow: 189, 116, 26; animation-delay: .5s; }
+    .fab-bola { --glow: 59, 130, 246; animation-delay: 1s; }
+
+    /* cincin pulse yang membesar lalu memudar */
+    .fab-wa::before {
+      position: absolute;
+      border: 2px solid rgba(var(--glow), .65);
+      border-radius: inherit;
+      content: "";
+      inset: -1px;
+      pointer-events: none;
+      animation: fab-ring 2.4s ease-out infinite;
+    }
+    .fab-togel::before { animation-delay: .5s; }
+    .fab-bola::before { animation-delay: 1s; }
+
+    /* ikon bergoyang berkala seperti notifikasi */
+    .fab-wa img { animation: fab-wiggle 3.6s ease-in-out infinite; transform-origin: 50% 60%; }
+    .fab-togel img { animation-delay: .6s; }
+    .fab-bola img { animation-delay: 1.2s; }
+
+    /* label teks saat hover / fokus */
+    .fab-wa::after {
+      position: absolute;
+      top: 50%;
+      right: calc(100% + 12px);
+      padding: 7px 12px;
+      border-radius: 11px;
+      background: var(--panel);
+      box-shadow: var(--raised);
+      color: var(--accent-strong);
+      content: attr(data-label);
+      font-size: 11px;
+      font-weight: 800;
+      opacity: 0;
+      pointer-events: none;
+      transform: translate(8px, -50%);
+      transition: opacity .2s ease, transform .2s ease;
+      white-space: nowrap;
+    }
+    .fab-wa:hover, .fab-wa:focus-visible { transform: translateY(-4px) scale(1.08); }
+    .fab-wa:hover::after, .fab-wa:focus-visible::after { opacity: 1; transform: translate(0, -50%); }
+    .fab-wa:hover img { animation-play-state: paused; }
+
+    @keyframes fab-ring {
+      0% { opacity: .85; transform: scale(1); }
+      100% { opacity: 0; transform: scale(1.6); }
+    }
+    @keyframes fab-glow {
+      0%, 100% { box-shadow: var(--raised), 0 0 0 rgba(var(--glow), 0); }
+      50% { box-shadow: var(--raised), 0 0 20px rgba(var(--glow), .55); }
+    }
+    @keyframes fab-wiggle {
+      0%, 55%, 100% { transform: rotate(0) scale(1); }
+      60% { transform: rotate(-14deg) scale(1.1); }
+      68% { transform: rotate(12deg) scale(1.1); }
+      76% { transform: rotate(-8deg) scale(1.05); }
+      84% { transform: rotate(5deg) scale(1.02); }
+      92% { transform: rotate(0) scale(1); }
+    }
+    /* ===== AKHIR EFEK TOMBOL ===== */
+
     #notif-container { position: fixed; z-index: 25; bottom: 18px; left: 18px; width: min(280px, calc(100vw - 95px)); pointer-events: none; }
     .live-notif {
       display: flex;
@@ -395,6 +460,7 @@
     }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
+      .fab-wa::before { display: none; }
     }
   </style>
 </head>
@@ -487,17 +553,17 @@
     <footer class="page-footer">PIKAT4D · Silakan hubungi layanan pelanggan melalui tautan yang tersedia.</footer>
   </main>
 
-  <a href="https://pikatfurdi.com/" class="fab-wa" aria-label="Buka layanan PIKAT4D">
+  <a href="https://pikatfurdi.com/" class="fab-wa fab-cs" data-label="Live Chat" aria-label="Buka layanan PIKAT4D">
     <img src="https://img.icons8.com/color/38/whatsapp--v1.png" alt="">
   </a>
 
   <!-- Tombol Prediksi Togel Baru di Pojok Kanan Bawah -->
-  <a href ="https://prediksi-togelpikat4d.vercel.app/" class="fab-wa" aria-label="Prediksi Togel PIKAT4D" style="bottom: 80px;">
+  <a href ="https://prediksi-togelpikat4d.vercel.app/" class="fab-wa fab-togel" data-label="Prediksi Togel" aria-label="Prediksi Togel PIKAT4D" style="bottom: 80px;">
     <img src="https://i.imgur.com/ELKLQSQ.png" alt="">
   </a>
 
   <!-- Tombol Prediksi Bola Baru di Pojok Kanan Bawah di atas Tombol prediksi togel -->
-  <a href ="https://prediksii-bola.vercel.app/" class="fab-wa" aria-label="Prediksi Bola PIKAT4D" style="bottom: 140px;">
+  <a href ="https://prediksii-bola.vercel.app/" class="fab-wa fab-bola" data-label="Prediksi Bola" aria-label="Prediksi Bola PIKAT4D" style="bottom: 140px;">
     <img src="https://i.imgur.com/TQPEQcz.png" alt="">
   </a>
 
